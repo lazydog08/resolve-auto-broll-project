@@ -11,6 +11,7 @@ def test_example_config_matches_project_defaults():
     config = load_config("config.example.yaml")
 
     assert asdict(config) == {
+        "timeline_drt": "",
         "broll_dir": "",
         "auto_broll_track_name": "AUTO_BROLL",
         "shot_id_pad_width": 3,
@@ -35,6 +36,7 @@ def test_load_config_layers_yaml_then_cli_overrides(tmp_path):
         "\n".join(
             [
                 "broll_dir: /from/yaml",
+                "timeline_drt: /from/yaml/Timeline.drt",
                 "out_dir: /reports/yaml",
                 "allow_partial: false",
                 "retime_short_sources: false",
@@ -57,6 +59,7 @@ def test_load_config_layers_yaml_then_cli_overrides(tmp_path):
     )
 
     assert config.broll_dir == "/from/cli"
+    assert config.timeline_drt == "/from/yaml/Timeline.drt"
     assert config.out_dir == "/reports/yaml"
     assert config.allow_partial is True
     assert config.retime_short_sources is True

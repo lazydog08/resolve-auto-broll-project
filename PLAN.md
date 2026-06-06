@@ -177,6 +177,7 @@ Loads `config.yaml` and CLI overrides into a typed `Config`.
 
 New config keys:
 
+- `timeline_drt: ""` as a first-run preflight reference to the `.drt` file the user imports into Resolve. The tool never parses or edits this file.
 - `retime_short_sources: true`
 - `heavy_stretch_threshold: 0.5`
 - `retime_backend: "auto"` with allowed values `auto`, `native`, `generated`
@@ -215,6 +216,7 @@ Every Resolve wrapper either returns a typed value or raises `ResolveApiError`.
 
 Modes:
 
+- `doctor`: validate the user-provided `.drt` timeline path and B-roll folder path without connecting to Resolve, then print the import/probe/dry-run/apply next steps.
 - `probe`: read V2 guides and write JSON; no timeline changes.
 - `dry-run`: probe, index, match, write would-place report; no timeline changes.
 - `apply`: duplicate timeline, create/use `AUTO_BROLL`, place B-roll, verify, report.

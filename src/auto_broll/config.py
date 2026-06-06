@@ -12,6 +12,7 @@ DEFAULT_CONFIG_PATH = Path("config.yaml")
 
 @dataclass
 class Config:
+    timeline_drt: str = ""
     broll_dir: str = ""
     auto_broll_track_name: str = "AUTO_BROLL"
     shot_id_pad_width: int = 3
