@@ -1,0 +1,36 @@
+.DS_Store
+
+# Local editable config. Track config.example.yaml instead.
+config.yaml
+.env
+.env.*
+
+# Python environments and caches.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+
+# Local collaboration and generated outputs.
+reports/
+output/
+*.log
+.reviews/
+
+# DaVinci Resolve exports/projects and private media.
+*.drp
+*.drt
+*.mp4
+*.mov
+*.m4v
+*.mxf
+*.avi
+*.braw
+*.wav
+*.mp3

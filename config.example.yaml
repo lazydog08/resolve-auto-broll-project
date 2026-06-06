@@ -1,0 +1,19 @@
+# Copy this file to config.yaml on each Mac, then fill machine-specific paths.
+
+broll_dir: ""
+auto_broll_track_name: "AUTO_BROLL"
+shot_id_pad_width: 3
+filename_pattern: "(?<![A-Za-z0-9])C(\\d{1,5})(?![0-9])"
+allow_partial: false
+retime_short_sources: true
+heavy_stretch_threshold: 0.5
+retime_backend: "auto"
+generated_retime_dir: "output/generated_retimes"
+clear_target_track: false
+duplicate_suffix: "__AUTO_BROLL_v001"
+textplus_source_priority:
+  - "StyledText"
+  - "Notes"
+media_type: 1
+out_dir: "./reports"
+log_level: "INFO"
