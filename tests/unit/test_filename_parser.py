@@ -10,11 +10,12 @@ from auto_broll.core.filename_parser import DEFAULT_PATTERN, canonicalize_shot_i
         ("C0001.mov", "1"),
         ("20260605_C0888_take2.mov", "888"),
         ("broll-C12.mp4", "12"),
+        ("20260609_A0126.MP4", "126"),
         ("folder/c007.MXF", "7"),
         ("C5248.MP4", "5248"),
     ],
 )
-def test_extract_shot_id_matches_explicit_c_digit_tokens(filename, expected):
+def test_extract_shot_id_matches_explicit_camera_digit_tokens(filename, expected):
     assert extract_shot_id(filename, DEFAULT_PATTERN, pad_width=3) == expected
 
 
@@ -27,10 +28,12 @@ def test_extract_shot_id_matches_explicit_c_digit_tokens(filename, expected):
         "camera2_take1.mp4",
         "CARD_COVER_0007.mov",
         "XC001.mov",
+        "XA001.mov",
         "C001A.mov",
+        "A001B.mov",
     ],
 )
-def test_extract_shot_id_rejects_non_explicit_c_digit_numbers(filename):
+def test_extract_shot_id_rejects_non_explicit_camera_digit_numbers(filename):
     assert extract_shot_id(filename, DEFAULT_PATTERN, pad_width=3) is None
 
 

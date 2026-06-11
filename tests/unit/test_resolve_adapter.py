@@ -72,6 +72,12 @@ def test_media_pool_item_frame_count_falls_back_to_duration_timecode_and_fps():
     assert media_pool_item_frame_count(FakeMediaPoolItem({"Frames": "", "Duration": "00:00:10:05", "FPS": "30.0"})) == 305
 
 
+def test_media_pool_item_fps_reads_fps_property():
+    from auto_broll.resolve.placement import media_pool_item_fps
+
+    assert media_pool_item_fps(FakeMediaPoolItem({"FPS": "119.88"})) == 119.88
+
+
 def test_build_video_only_clip_info_enforces_track_and_video_only_shape():
     from auto_broll.resolve.placement import VIDEO_ONLY_MEDIA_TYPE, build_video_only_clip_info
 

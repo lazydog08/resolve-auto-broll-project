@@ -9,6 +9,7 @@ from auto_broll.pipeline import (
     decision_to_verify_record,
     _materialize_retime_for_placement,
     _set_current_timeline,
+    _source_duration_for_timeline_placement,
     load_decisions_from_report,
     protected_track_snapshot,
     run_dry_run_with_guides,
@@ -211,6 +212,14 @@ def test_materialize_retime_for_placement_generates_file_for_stretched_decision(
 
     assert materialized.generated_retime_file == str(generated)
     assert materialized.retime_method == "generated"
+
+
+def test_source_duration_for_timeline_placement_scales_offspeed_media():
+    class FakeMediaItem:
+        def GetClipProperty(self, key):
+            return {"FPS": "119.88"}.get(key)
+
+    assert _source_duration_for_timeline_placement(156, FakeMediaItem(), 59.94) == 312
 
 
 class FakeNamedTimeline:

@@ -114,7 +114,11 @@ def run_apply(config: Config, override_csv: str | None = None) -> list[VerifyRec
 
     from auto_broll.resolve.connection import connect, get_current_project, get_current_timeline
     from auto_broll.resolve.duplicate import duplicate_current_timeline
-    from auto_broll.resolve.placement import append_video_only_clip, import_media, media_pool_item_frame_count
+    from auto_broll.resolve.placement import (
+        append_video_only_clip,
+        import_media,
+        media_pool_item_frame_count,
+    )
     from auto_broll.resolve.textplus import read_textplus_guides_from_timeline
     from auto_broll.resolve.track import clear_auto_broll_track, ensure_auto_broll_track, locked_video_track
 
@@ -200,7 +204,11 @@ def run_apply(config: Config, override_csv: str | None = None) -> list[VerifyRec
                     media_pool,
                     media_item,
                     record_frame=_decision_start(decision),
-                    duration=_decision_duration(decision),
+                    duration=_source_duration_for_timeline_placement(
+                        _decision_duration(decision),
+                        media_item,
+                        timeline_fps,
+                    ),
                     track_index=auto_track_index,
                 )
                 placements.append(
@@ -611,3 +619,14 @@ def _timeline_fps(timeline) -> float:
         return float(str(value).split()[0])
     except (TypeError, ValueError):
         return 25.0
+
+
+def _source_duration_for_timeline_placement(target_duration: int, media_item, timeline_fps: float) -> int:
+    from auto_broll.resolve.placement import media_pool_item_fps
+
+    source_fps = media_pool_item_fps(media_item)
+    if target_duration <= 0:
+        return target_duration
+    if not source_fps or not timeline_fps or source_fps <= 0 or timeline_fps <= 0:
+        return target_duration
+    return max(1, int(round(target_duration * source_fps / timeline_fps)))

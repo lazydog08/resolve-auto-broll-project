@@ -85,6 +85,12 @@ def media_pool_item_frame_count(media_pool_item: Any) -> int | None:
     return None
 
 
+def media_pool_item_fps(media_pool_item: Any) -> float | None:
+    if media_pool_item is None or not hasattr(media_pool_item, "GetClipProperty"):
+        return None
+    return _coerce_float(_clip_property(media_pool_item, "FPS"))
+
+
 def _clip_property(media_pool_item: Any, key: str) -> Any:
     try:
         return media_pool_item.GetClipProperty(key)

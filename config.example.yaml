@@ -4,11 +4,11 @@
 # or edits this file; doctor uses it only to check that the first-run input exists.
 timeline_drt: ""
 
-# Folder containing B-roll videos named with explicit C<digits> shot ids.
+# Folder containing B-roll videos named with explicit A<digits> or C<digits> shot ids.
 broll_dir: ""
 auto_broll_track_name: "AUTO_BROLL"
 shot_id_pad_width: 3
-filename_pattern: "(?<![A-Za-z0-9])C(\\d{1,5})(?![0-9])"
+filename_pattern: "(?<![A-Za-z0-9])(?:A|C)(\\d{1,5})(?![0-9])"
 allow_partial: false
 retime_short_sources: true
 heavy_stretch_threshold: 0.5

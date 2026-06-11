@@ -15,7 +15,7 @@ def test_example_config_matches_project_defaults():
         "broll_dir": "",
         "auto_broll_track_name": "AUTO_BROLL",
         "shot_id_pad_width": 3,
-        "filename_pattern": r"(?<![A-Za-z0-9])C(\d{1,5})(?![0-9])",
+        "filename_pattern": r"(?<![A-Za-z0-9])(?:A|C)(\d{1,5})(?![0-9])",
         "allow_partial": False,
         "retime_short_sources": True,
         "heavy_stretch_threshold": 0.5,

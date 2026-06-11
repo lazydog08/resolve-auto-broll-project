@@ -16,7 +16,7 @@ class Config:
     broll_dir: str = ""
     auto_broll_track_name: str = "AUTO_BROLL"
     shot_id_pad_width: int = 3
-    filename_pattern: str = r"(?<![A-Za-z0-9])C(\d{1,5})(?![0-9])"
+    filename_pattern: str = r"(?<![A-Za-z0-9])(?:A|C)(\d{1,5})(?![0-9])"
     allow_partial: bool = False
     retime_short_sources: bool = True
     heavy_stretch_threshold: float = 0.5

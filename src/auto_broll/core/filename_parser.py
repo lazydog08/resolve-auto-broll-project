@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 import re
 
-DEFAULT_PATTERN = r"(?i)(?<![A-Za-z0-9])C(\d{1,5})(?![A-Za-z0-9])"
+DEFAULT_PATTERN = r"(?i)(?<![A-Za-z0-9])(?:A|C)(\d{1,5})(?![A-Za-z0-9])"
 
 
 def extract_shot_id(
@@ -13,7 +13,7 @@ def extract_shot_id(
     pattern: str = DEFAULT_PATTERN,
     pad_width: int = 3,
 ) -> str | None:
-    """Return a normalized id from an explicit ``C<digits>`` filename token."""
+    """Return a normalized id from an explicit camera shot filename token."""
     basename = os.path.basename(filename)
     match = re.search(pattern or DEFAULT_PATTERN, basename)
     if match is None:
@@ -30,7 +30,7 @@ def extract_raw_shot_id(
     filename: str,
     pattern: str = DEFAULT_PATTERN,
 ) -> str | None:
-    """Return raw digits from an explicit ``C<digits>`` filename token."""
+    """Return raw digits from an explicit ``A<digits>`` or ``C<digits>`` filename token."""
     basename = os.path.basename(filename)
     match = re.search(pattern or DEFAULT_PATTERN, basename)
     if match is None:
@@ -41,7 +41,7 @@ def extract_raw_shot_id(
         return None
 
     digits, span = digit_match
-    if not _is_explicit_c_token(basename, span):
+    if not _is_explicit_camera_token(basename, span):
         return None
 
     return digits
@@ -64,12 +64,12 @@ def _first_group_with_span(match: re.Match[str]) -> tuple[str, tuple[int, int]] 
     return None
 
 
-def _is_explicit_c_token(text: str, digit_span: tuple[int, int]) -> bool:
+def _is_explicit_camera_token(text: str, digit_span: tuple[int, int]) -> bool:
     start, end = digit_span
-    c_index = start - 1
-    if c_index < 0 or text[c_index].lower() != "c":
+    prefix_index = start - 1
+    if prefix_index < 0 or text[prefix_index].lower() not in {"a", "c"}:
         return False
-    if c_index > 0 and text[c_index - 1].isalnum():
+    if prefix_index > 0 and text[prefix_index - 1].isalnum():
         return False
     if end < len(text) and text[end].isalnum():
         return False
