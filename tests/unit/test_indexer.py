@@ -45,3 +45,15 @@ def test_build_index_groups_c888_and_c0888_under_same_canonical_id(tmp_path):
     index = build_index([str(first), str(second)], DEFAULT_PATTERN, pad_width=3)
 
     assert [candidate.path for candidate in index["888"]] == sorted([str(first), str(second)])
+
+
+def test_build_index_groups_a_and_c_camera_prefixes_under_same_numeric_id(tmp_path):
+    first = tmp_path / "A0126.MP4"
+    second = tmp_path / "C0126.MP4"
+    for path in [first, second]:
+        path.write_text("fixture")
+
+    index = build_index([str(first), str(second)], DEFAULT_PATTERN, pad_width=3)
+
+    assert list(index) == ["126"]
+    assert [candidate.path for candidate in index["126"]] == sorted([str(first), str(second)])

@@ -95,7 +95,7 @@ def run_doctor(config: Config, args: argparse.Namespace) -> int:
     print(f"video_files: {len(video_paths)}")
     print(f"files_with_shot_ids: {matched_video_count}")
     if matched_video_count == 0:
-        print("warning: no B-roll filenames matched the configured C<digits> shot-id rule")
+        print("warning: no B-roll filenames matched the configured A/C<digits> shot-id rule")
     print("next steps:")
     broll_arg = shlex.quote(str(broll_dir))
     probe_out_dir = shlex.quote(str(Path(config.out_dir) / "probe"))

@@ -5,6 +5,7 @@
 timeline_drt: ""
 
 # Folder containing B-roll videos named with explicit A<digits> or C<digits> shot ids.
+# The A/C camera prefix is ignored; only the trailing digits are used for matching.
 broll_dir: ""
 auto_broll_track_name: "AUTO_BROLL"
 shot_id_pad_width: 3

@@ -7,7 +7,7 @@ This project helps a Codex user place B-roll safely in DaVinci Resolve. It reads
 Give Codex two paths before asking it to run the tool:
 
 - `timeline_drt`: a `.drt` timeline file that follows the project rules below.
-- `broll_dir`: a folder containing B-roll videos named with explicit `C<digits>` shot ids, such as `C001.mov`, `20260605_C888.mp4`, or `C0888.MP4`.
+- `broll_dir`: a folder containing B-roll videos named with explicit `A<digits>` or `C<digits>` shot ids, such as `A001.mov`, `C001.mov`, `20260605_A888.mp4`, or `C0888.MP4`.
 
 Example instruction to Codex:
 
@@ -35,11 +35,11 @@ The `.drt` timeline must be imported/opened in DaVinci Resolve before Resolve-de
 
 The timeline should have:
 
-- V2 Text+ guide clips containing shot ids such as `888`, `C888`, `C0888`, `shot 888`, `clip 888`, or `镜头888`.
+- V2 Text+ guide clips containing shot ids such as `888`, `A888`, `C888`, `C0888`, `shot 888`, `clip 888`, or `镜头888`.
 - V1 and V2 reserved for the original edit and guide layer. The tool never edits these tracks.
 - Room for a generated video-only track named `AUTO_BROLL`.
 
-The B-roll folder should contain video files with explicit `C<digits>` tokens in the filename. Filename matching intentionally ignores arbitrary dates, camera card numbers, and take numbers unless they are part of a `C<digits>` token.
+The B-roll folder should contain video files with explicit `A<digits>` or `C<digits>` tokens in the filename. `A` and `C` are camera prefixes only; matching uses the trailing numeric shot id, so `A0126`, `C0126`, and `126` all compare as shot `126`. Filename matching intentionally ignores arbitrary dates, camera card numbers, and take numbers unless they are part of an explicit `A/C<digits>` token.
 
 ## Resolve Setup
 

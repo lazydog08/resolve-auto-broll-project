@@ -15,7 +15,7 @@ New behavior:
 - Parse Text+ into an ordered list of raw shot ids.
 - Ignore annotation-only guides such as `数据`, `动效`, `备注`, `animation`, and similar non-shot notes. Report them as `IGNORED_NON_SHOT_TEXT`, not `NO_MATCH`.
 - Split a multi-shot Text+ guide into equal half-open frame segments. The first remainder segments receive one extra frame.
-- Match by canonical numeric id, so `888`, `C888`, and `C0888` compare as the same id. Filename matching remains anchored to explicit `C<digits>` tokens.
+- Match by canonical numeric id, so `888`, `A888`, `C888`, and `C0888` compare as the same id. `A` and `C` are camera prefixes only; they do not affect B-roll matching. Filename matching remains anchored to explicit `A<digits>` or `C<digits>` tokens.
 - If a source clip is shorter than the target segment, slow it uniformly to fill the segment exactly when retiming is enabled. Report `STRETCHED`, `STRETCHED_HEAVY`, or `STRETCH_FAILED`; do not silently skip as `SHORT_SOURCE`.
 - `apply` must be safe to re-run: the duplicated timeline should contain one clean generated AUTO_BROLL result, not stacked duplicate layers.
 
@@ -67,10 +67,10 @@ Output:
 Rules:
 
 - Accept bare numeric shot tokens of 3 to 5 digits when separated by whitespace, punctuation, slash, brackets, or string boundaries.
-- Accept `C888`, `C0888`, `shot 888`, `clip 888`, `镜头888`.
+- Accept `A888`, `C888`, `A0888`, `C0888`, `shot 888`, `clip 888`, `镜头888`.
 - Preserve order.
 - Ignore non-shot words such as `数据`, `动效`, `备注`, `animation`, `motion graphics`, `chart`, and similar annotation text.
-- Reject digits embedded in normal words, including `数据2026`, `图表01`, `5248A`, `A5248`, `1080p`, `50%`, and `v2`.
+- Reject digits embedded in normal words, including `数据2026`, `图表01`, `5248A`, `B5248`, `1080p`, `50%`, and `v2`.
 - Return an empty list when no valid shot id exists.
 
 ### `auto_broll.core.filename_parser`
@@ -87,7 +87,8 @@ Output:
 
 Rules:
 
-- Anchor only on explicit `C<digits>` tokens.
+- Anchor only on explicit `A<digits>` or `C<digits>` tokens.
+- Ignore the `A`/`C` camera prefix for matching and group candidates by the trailing numeric shot id.
 - Do not match arbitrary dates, card ids, camera ids, or take numbers.
 - Preserve raw and canonical ids in candidates.
 
@@ -271,7 +272,7 @@ Streams A and C do not need Resolve. Stream B needs Resolve. Stream D integrates
 Unit tests must pass without Resolve:
 
 - `test_shot_parser.py`: accepted forms, multiple shot ids, annotation-only text, embedded-number rejection, ordered output.
-- `test_filename_parser.py`: explicit `C<digits>` match; reject dates/card/camera/take-only numbers.
+- `test_filename_parser.py`: explicit `A/C<digits>` match; reject dates/card/camera/take-only numbers.
 - `test_indexer.py`: recursive file grouping, duplicate candidates, unsupported names ignored.
 - `test_override.py`: CSV parsing, normalized ids, malformed rows.
 - `test_matcher.py`: planned OK, duplicate, no match, override wins, annotation ignored, multi-shot segments, short source stretch/disabled statuses.

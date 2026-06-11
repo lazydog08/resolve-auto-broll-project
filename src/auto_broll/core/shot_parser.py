@@ -6,12 +6,12 @@ import re
 
 from auto_broll.core.filename_parser import canonicalize_shot_id
 
-_C_PREFIXED_ID = re.compile(r"(?<![A-Za-z0-9])C0*(\d{1,5})(?![A-Za-z0-9])", re.IGNORECASE)
+_CAMERA_PREFIXED_ID = re.compile(r"(?<![A-Za-z0-9])(?:A|C)0*(\d{1,5})(?![A-Za-z0-9])", re.IGNORECASE)
 _LABELED_ID = re.compile(
-    r"(?i)(?:shot|clip|镜头)\s*[:：#-]?\s*C?0*(\d{1,5})(?![A-Za-z0-9])"
+    r"(?i)(?:shot|clip|镜头)\s*[:：#-]?\s*(?:A|C)?0*(\d{1,5})(?![A-Za-z0-9])"
 )
 _RANGE_ID = re.compile(
-    r"(?<![A-Za-z0-9])C?0*(\d{3,5})\s*[-~～—]\s*C?0*(\d{3,5})(?![A-Za-z0-9\u4e00-\u9fff%])",
+    r"(?<![A-Za-z0-9])(?:A|C)?0*(\d{3,5})\s*[-~～—]\s*(?:A|C)?0*(\d{3,5})(?![A-Za-z0-9\u4e00-\u9fff%])",
     re.IGNORECASE,
 )
 _ABBREVIATED_PAIR = re.compile(r"(?<![A-Za-z0-9\u4e00-\u9fff])(\d{4})\s*[/、,，\s]\s*(\d{2})(?![A-Za-z0-9\u4e00-\u9fff%])")
@@ -51,7 +51,7 @@ def parse_shot_ids(raw_text: str | None, pad_width: int = 3) -> list[str]:
             matches.append((match.start(1), match.end(1), 1, first))
             matches.append((match.start(2), match.end(2), 1, second))
 
-    for pattern in (_LABELED_ID, _C_PREFIXED_ID, _BARE_NUMERIC_ID):
+    for pattern in (_LABELED_ID, _CAMERA_PREFIXED_ID, _BARE_NUMERIC_ID):
         for match in pattern.finditer(text):
             shot_id = canonicalize_shot_id(match.group(1))
             if shot_id is None:
