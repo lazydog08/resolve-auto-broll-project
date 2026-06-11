@@ -150,3 +150,21 @@ def test_decide_matches_uses_parser_when_guides_only_have_raw_text():
 
     assert [decision.shot_id for decision in decisions] == ["5248", "5249"]
     assert [decision.status for decision in decisions] == [PLANNED_OK, NO_MATCH]
+
+
+def test_decide_matches_expands_range_guides_into_equal_segments():
+    decisions = decide_matches(
+        [guide(None, duration=101, raw_text="7976-7980", parsed_shot_ids=[])],
+        index={str(shot_id): [candidate(str(shot_id), f"/broll/C{shot_id}.MP4")] for shot_id in range(7976, 7981)},
+    )
+
+    assert [decision.shot_id for decision in decisions] == ["7976", "7977", "7978", "7979", "7980"]
+    assert [decision.status for decision in decisions] == [PLANNED_OK] * 5
+    assert [(decision.segment.segment_start, decision.segment.segment_end) for decision in decisions] == [
+        (100, 121),
+        (121, 141),
+        (141, 161),
+        (161, 181),
+        (181, 201),
+    ]
+    assert [decision.segment.segment_duration for decision in decisions] == [21, 20, 20, 20, 20]
